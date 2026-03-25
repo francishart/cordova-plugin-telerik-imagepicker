@@ -104,7 +104,11 @@ public class ImagePicker extends CordovaPlugin {
                 imagePickerIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
             } else {
                 PickVisualMediaRequest pickVisualMediaRequest = new PickVisualMediaRequest.Builder().setMediaType(allowVideo ? ActivityResultContracts.PickVisualMedia.ImageAndVideo.INSTANCE : ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE).build();
-                imagePickerIntent = new ActivityResultContracts.PickMultipleVisualMedia(maxImageCount).createIntent(cordova.getContext(), pickVisualMediaRequest);
+                if (maxImageCount > 1) {
+                    imagePickerIntent = new ActivityResultContracts.PickMultipleVisualMedia(maxImageCount).createIntent(cordova.getContext(), pickVisualMediaRequest);
+                } else {
+                    imagePickerIntent = new ActivityResultContracts.PickVisualMedia().createIntent(cordova.getContext(), pickVisualMediaRequest);
+                }
             }
 
             cordova.startActivityForResult(this, imagePickerIntent, SELECT_PICTURE);
